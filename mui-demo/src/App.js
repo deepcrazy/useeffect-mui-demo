@@ -7,18 +7,30 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import "./App.css";
 
 const useStyles = makeStyles(theme => {
   return {
     root: {
-      flexgrow: 1
+      flexgrow: 1,
+      width: '100%',
     },
     paper: {
       height: 140,
       width: 100,
       backgroundColor: "red"
-    }
+    },
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      flexBasis: '33.33%',
+      flexShrink: 0,
+    },
   };
 });
 
@@ -27,6 +39,12 @@ function App() {
   const [isChecked, setChecked] = React.useState(false);
   const [isRow, setRow] = React.useState(true);
   const [labelText, setLabelText] = React.useState("Row");
+
+  const [expanded, setExpanded] = React.useState(false);
+  const handleExpansion = panel => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   const classes = useStyles();
   const handleChange = event => {
     setSpacing(Number(event.target.value));
@@ -52,28 +70,41 @@ function App() {
               onChange={() => {
                 setChecked(!isChecked);
                 setRow(isChecked);
-                setLabelText(!isChecked ? "Column" :"Row" )
+                setLabelText(!isChecked ? "Column" : "Row")
               }}
             />
           }
         />
-        <Grid container>
-          <RadioGroup
-            name="spacing"
-            value={spacing.toString()}
-            onChange={handleChange}
-            row={isRow}
+        <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleExpansion('panel1')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
           >
-            {[0, 1, 2, 5, 7, 9].map(value => (
-              <FormControlLabel
-                key={value}
-                control={<Radio />}
-                label={value}
-                value={value.toString()}
-              />
-            ))}
-          </RadioGroup>
-        </Grid>
+            <Typography className={classes.heading}>Setting</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+              {<Grid container>
+                <RadioGroup
+                  name="spacing"
+                  value={spacing.toString()}
+                  onChange={handleChange}
+                  row={isRow}
+                >
+                  {[0, 1, 2, 5, 7, 9].map(value => (
+                    <FormControlLabel
+                      key={value}
+                      control={<Radio />}
+                      label={value}
+                      value={value.toString()}
+                    />
+                  ))}
+                </RadioGroup>
+              </Grid>}
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       </Grid>
     </div>
   );

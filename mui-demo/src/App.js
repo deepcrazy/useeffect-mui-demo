@@ -29,7 +29,7 @@ function App() {
   const [labelText, setLabelText] = React.useState("Row");
   const classes = useStyles();
   const handleChange = event => {
-    setSpacing(event.target.value);
+    setSpacing(Number(event.target.value));
   };
   return (
     <div className="App">

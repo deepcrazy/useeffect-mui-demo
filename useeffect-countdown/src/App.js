@@ -5,11 +5,17 @@ function App() {
   const Timer = () => {
     const [count, setCount] = React.useState(0);
     const [isActive, setIsActive] = React.useState(false);
+    const [startResumeText, setStartResumeText] = React.useState("Start")
 
     const toggle = () => {
       setIsActive(!isActive);
     };
 
+    const resetBtnClick = () => {
+      setIsActive(false)
+      setStartResumeText("Start")
+      setCount(0)
+    }
     React.useEffect(() => {
       let interval = null;
       if (isActive) {
@@ -19,6 +25,7 @@ function App() {
           });
         }, 1000);
       } else if (!isActive && count !== 0) {
+        setStartResumeText("Resume")
         clearInterval(interval);
       }
       return () => clearInterval(interval);
@@ -29,8 +36,9 @@ function App() {
         <div className="count">{count}</div>
         <div>
           {/*Modify below for adding "Resunme"*/}
-          <button onClick={toggle}> {isActive ? "Pause" : "Start"} </button>
+          <button onClick={toggle}> {isActive ? "Pause" : startResumeText} </button>
           {/*Add Reset button here*/}
+          <button onClick={resetBtnClick}>Reset</button>
         </div>
       </div>
     );
